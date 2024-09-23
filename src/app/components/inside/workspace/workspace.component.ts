@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
-import { DataService } from '../../../services/data.service';
+// import { Router } from '@angular/router';
+// import { DataService } from '../../../services/data.service';
 
 @Component({
   selector: 'app-workspace',
@@ -13,18 +13,18 @@ import { DataService } from '../../../services/data.service';
 export class WorkspaceComponent implements OnInit {
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private dataService: DataService
+    // private router: Router,
+    // private dataService: DataService
   ) {}
 
   ngOnInit() {
-    this.fetchData();
+    // this.fetchData();
   }
 
-  async fetchData() {
-    const data = await this.dataService.getAllData('');
-    console.log(data);
-  }
+  // async fetchData() {
+  //   const data = await this.dataService.getAllData('');
+  //   console.log(data);
+  // }
 
   logout() {
     this.authService.logout();
