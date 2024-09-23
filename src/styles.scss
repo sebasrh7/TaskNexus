@@ -1,0 +1,39 @@
+@use "@angular/material" as mat;
+@use "../m3-theme" as theme;
+@use "sass:map";
+
+// Include core styles only once
+@include mat.core();
+
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+// // Configuración de tipografía
+// $typography-config: mat.m2-define-typography-config(
+//   $font-family: "Poppins, system-ui, sans-serif",
+// );
+// // Aplicar configuración de tipografía
+// @include mat.typography-hierarchy($typography-config);
+
+// Light theme
+.light-theme {
+  @include mat.core-theme(theme.$light-theme);
+  @include mat.all-component-themes(theme.$light-theme);
+}
+
+// Dark theme
+.dark-theme {
+  @include mat.core-color(theme.$dark-theme);
+  @include mat.all-component-colors(theme.$dark-theme);
+}
+
+body {
+  margin: 0;
+  padding-inline: 16px;
+}

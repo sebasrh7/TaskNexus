@@ -1,0 +1,11 @@
+<mat-slide-toggle
+  (change)="toggleTheme()"
+  [checked]="isDarkTheme$ | async"
+  color="primary"
+>
+  @if (isDarkTheme$ | async){
+    <span>🌞</span>
+  } @else{
+    <span>🌚</span>
+  }
+</mat-slide-toggle>
