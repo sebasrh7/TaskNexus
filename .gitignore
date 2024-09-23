@@ -1,5 +1,6 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 password.txt
+src/environments/
 # Compiled output
 /dist
 /tmp
@@ -13,7 +14,7 @@ yarn-error.log
 
 # IDEs and editors
 .idea/
-.project
+.projects
 .classpath
 .c9/
 *.launch

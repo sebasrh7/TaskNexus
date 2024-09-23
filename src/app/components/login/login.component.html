@@ -2,7 +2,7 @@
   <div class="left-container">
     <mat-card class="login-card">
       <mat-card-header class="login-card-header">
-        <mat-card-title class="login-card-title">Login</mat-card-title>
+        <mat-card-title class="login-card-title"> Login </mat-card-title>
         <mat-card-subtitle class="login-card-subtitle">
           Enter your email to get started
         </mat-card-subtitle>
@@ -11,52 +11,56 @@
       <mat-card-content class="login-card-content">
         <form
           (ngSubmit)="loginWithEmail()"
+          [formGroup]="emailForm"
           #loginForm="ngForm"
           class="login-form"
         >
-          <mat-form-field class="login-form-field">
+          <mat-form-field class="login-form-field" appearance="outline">
             <mat-label>Email</mat-label>
             <input
               type="email"
               matInput
               placeholder="john@example.com"
-              [(ngModel)]="email"
               name="email"
+              formControlName="email"
               required
             />
-            @if (linkSuccess && email){
-            <mat-hint align="start" class="success-hint">
-              Magic link sent! Check your email.
-            </mat-hint>
-            } @if (error){
-            <mat-hint align="start" class="error-hint">
-              {{ error }}
-            </mat-hint>
+            @if (emailForm.get('email')?.invalid) {
+            <mat-error> {{ getEmailErrorMessage() }}</mat-error>
             }
           </mat-form-field>
 
           <button
-            mat-raised-button
+            mat-flat-button
             color="primary"
-            [disabled]="!email"
+            [disabled]="emailForm.invalid || isLoading"
             type="submit"
             class="login-button"
           >
-            Send magic link
+            @if(!isLoading) { Send Magic Link } @else {
+            <mat-spinner
+              class="login-spinner"
+              diameter="24"
+              mode="indeterminate"
+            ></mat-spinner>
+            }
           </button>
         </form>
+
         <div class="login-divider">
-          <span>or</span>
+          <span class="login-divider-text">or</span>
         </div>
+
         <button
           (click)="loginWithGoogle()"
           class="google-button"
-          mat-raised-button
+          mat-stroked-button
+          color="primary"
         >
           <mat-icon class="google-icon">
             <img
-              src="https://img.icons8.com/color/48/000000/google-logo.png"
               alt="Google"
+              src="https://img.icons8.com/color/48/000000/google-logo.png"
             />
           </mat-icon>
           Google
