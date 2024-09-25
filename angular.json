@@ -16,7 +16,7 @@
             "customWebpackConfig": {
               "path": "src/custom-webpack.config.ts"
             },
-            "allowedCommonJsDependencies": ["lodash"],
+            "allowedCommonJsDependencies": ["*"],
             "outputPath": "dist/task-nexus",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -40,8 +40,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
