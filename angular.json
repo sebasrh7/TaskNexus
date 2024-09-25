@@ -68,10 +68,6 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
-            "customWebpackConfig": {
-              "path": "src/custom-webpack.config.ts"
-            },
-
             "production": {
               "buildTarget": "TaskNexus:build:production"
             },

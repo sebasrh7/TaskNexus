@@ -13,6 +13,7 @@ export class AuthService {
     new BehaviorSubject(null);
 
   constructor(private router: Router) {
+    console.log('message: ', environment.supabase.supabaseUrl);
     this.supabase = createClient(
       environment.supabase.supabaseUrl,
       environment.supabase.supabaseAnonKey
