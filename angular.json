@@ -27,7 +27,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/_redirects"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
@@ -68,10 +69,6 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
-            "customWebpackConfig": {
-              "path": "src/custom-webpack.config.ts"
-            },
-
             "production": {
               "buildTarget": "TaskNexus:build:production"
             },
