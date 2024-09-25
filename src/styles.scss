@@ -20,7 +20,7 @@ html {
   @include mat.all-component-typographies(theme.$light-theme);
   @include mat.color-variants-backwards-compatibility(theme.$light-theme);
 
-  --background-color: #{mat.get-theme-color(theme.$light-theme, neutral, 70)};
+  --background-color: #{mat.get-theme-color(theme.$light-theme, neutral, 0)};
   --text-color: #{mat.get-theme-color(theme.$light-theme, neutral-variant, 10)};
 }
 // Dark theme
