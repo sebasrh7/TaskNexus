@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  IMAGE_LOADER,
+  ImageLoaderConfig,
+  NgOptimizedImage,
+} from '@angular/common';
 
 import {
   FormControl,
@@ -15,14 +20,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-
-import { ThemeService } from '../../services/theme.service';
-import { ThemeComponent } from '../theme/theme.component';
 
 @Component({
   selector: 'app-login',
@@ -36,8 +37,8 @@ import { ThemeComponent } from '../theme/theme.component';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    ThemeComponent,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgOptimizedImage,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -51,7 +52,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private themeService: ThemeService,
     private snackBar: MatSnackBar
   ) {
     this.emailForm = new FormGroup({
@@ -66,12 +66,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      this.themeService.setDarkTheme(true);
-    } else {
-      this.themeService.setDarkTheme(false);
-    }
+    // Do nothing
   }
 
   async loginWithEmail() {

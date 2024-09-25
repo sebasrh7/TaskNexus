@@ -86,6 +86,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding: 20px;
+  
 }
 
 .login-title {
@@ -98,8 +100,10 @@
   margin-bottom: 20px;
 }
 
-.login-image {
-  max-width: 100%;
-  height: auto;
-  padding: 20px;
+img {
+  max-inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: auto 1124 / 701;
+  object-fit: cover;
+  object-position: top center;
 }

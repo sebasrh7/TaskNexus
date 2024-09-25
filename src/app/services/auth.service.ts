@@ -14,8 +14,8 @@ export class AuthService {
 
   constructor(private router: Router) {
     this.supabase = createClient(
-      environment.supabaseUrl,
-      environment.supabaseAnonKey
+      environment.supabase.supabaseUrl,
+      environment.supabase.supabaseAnonKey
     );
 
     this.supabase.auth.getSession().then(({ data: { session }, error }) => {
