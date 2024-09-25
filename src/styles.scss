@@ -2,7 +2,6 @@
 @use "../m3-theme" as theme;
 @use "sass:map";
 
-// Include core styles only once
 @include mat.core();
 
 html {
@@ -14,26 +13,31 @@ html {
   box-sizing: inherit;
 }
 
-// // Configuración de tipografía
-// $typography-config: mat.m2-define-typography-config(
-//   $font-family: "Poppins, system-ui, sans-serif",
-// );
-// // Aplicar configuración de tipografía
-// @include mat.typography-hierarchy($typography-config);
-
 // Light theme
 .light-theme {
   @include mat.core-theme(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
-}
+  @include mat.all-component-typographies(theme.$light-theme);
+  @include mat.color-variants-backwards-compatibility(theme.$light-theme);
 
+  --background-color: #{mat.get-theme-color(theme.$light-theme, neutral, 0)};
+  --text-color: #{mat.get-theme-color(theme.$light-theme, neutral-variant, 10)};
+}
 // Dark theme
 .dark-theme {
   @include mat.core-color(theme.$dark-theme);
   @include mat.all-component-colors(theme.$dark-theme);
+  @include mat.all-component-typographies(theme.$dark-theme);
+  @include mat.color-variants-backwards-compatibility(theme.$dark-theme);
+
+  --background-color: #{mat.get-theme-color(theme.$dark-theme, neutral, 10)};
+  --text-color: #{mat.get-theme-color(theme.$dark-theme, neutral-variant, 100)};
 }
 
 body {
   margin: 0;
   padding-inline: 16px;
+
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
