@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  IMAGE_LOADER,
-  ImageLoaderConfig,
-  NgOptimizedImage,
-} from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 
 import {
   FormControl,
@@ -50,7 +46,7 @@ export class LoginComponent implements OnInit {
   error: string = '';
 
   constructor(
-    private authService: AuthService,
+    private auth: AuthService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
@@ -58,7 +54,7 @@ export class LoginComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
     });
 
-    this.authService.currentUser.subscribe((user) => {
+    this.auth.currentUser.subscribe((user) => {
       if (user) {
         this.router.navigateByUrl('/workspace', { replaceUrl: true });
       }
@@ -75,7 +71,7 @@ export class LoginComponent implements OnInit {
     const email = this.emailForm.get('email')?.value;
     if (email) {
       try {
-        const result = await this.authService.loginWithEmail(email);
+        const result = await this.auth.loginWithEmail(email);
         if (!result.error) {
           this.linkSuccess = true;
           this.error = '';
@@ -102,7 +98,7 @@ export class LoginComponent implements OnInit {
 
   async loginWithGoogle() {
     try {
-      this.authService.loginWithGoogle();
+      this.auth.loginWithGoogle();
     } catch (error) {
       console.error(error);
       this.snackBar.open('An unexpected error occurred.', 'Close', {

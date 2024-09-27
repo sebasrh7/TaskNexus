@@ -13,7 +13,6 @@ export class AuthService {
     new BehaviorSubject(null);
 
   constructor(private router: Router) {
-    console.log('message: ', environment.supabase.supabaseUrl);
     this.supabase = createClient(
       environment.supabase.supabaseUrl,
       environment.supabase.supabaseAnonKey
@@ -21,7 +20,6 @@ export class AuthService {
 
     this.supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
-        console.error('Error getting session:', error);
         this._currentUser.next(false);
       } else if (session) {
         this._currentUser.next(session.user);
