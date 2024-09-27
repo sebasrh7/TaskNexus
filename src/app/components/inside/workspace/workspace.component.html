@@ -1,2 +1,31 @@
-<p>workspace works!</p>
-<button mat-button (click)="logout()" class="w-full mt-2">Logout</button>
+<header class="header">
+  <nav class="nav-container">
+    <div class="nav-content">
+      <div class="logo-container">
+        <a routerLink="/workspace">
+          <img
+            class="logo"
+            src="https://supabase.com/docs/supabase-dark.svg"
+            alt=""
+          />
+        </a>
+      </div>
+      <div class="user-info">
+        <span class="user-email">{{ (user | async)?.email }}</span>
+        <img ngxGravatar [email]="(user | async)?.email" />
+        <button mat-button (click)="logout()" class="logout-btn">Logout</button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="main-container">
+  <ul class="boards-grid">
+    @for (board of boards; track board.boards.id){
+    <li [routerLink]="board.boards.id" class="board-item">
+      {{ board.boards.title }}
+    </li>
+    }
+    <li (click)="startBoard()" class="new-board">+ New board</li>
+  </ul>
+</main>
