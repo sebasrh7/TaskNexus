@@ -1,1 +1,84 @@
-<p>board works!</p>
+<header>
+  <mat-toolbar color="primary" class="header-toolbar">
+    <div class="nav-container">
+      <div class="logo-container">
+        <a routerLink="/workspace" class="back-link"> &lt; Back </a>
+      </div>
+      <div class="title-container">
+        @if(boardInfo){
+        <mat-form-field appearance="outline" class="board-title-input">
+          <mat-label>Board Title</mat-label>
+          <input
+            matInput
+            (ngModelChange)="titleChanged = true"
+            [(ngModel)]="boardInfo.title"
+            class="title-input"
+            required
+          />
+        </mat-form-field>
+        } @if(titleChanged){
+        <button mat-button (click)="saveBoardTitle()" class="save-button">
+          Save
+        </button>
+        }
+      </div>
+
+      <div class="delete-container">
+        <button mat-button color="warn" (click)="deleteBoard()">
+          Delete board
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+</header>
+
+<main class="container">
+  <div class="grid-container">
+    <!-- ITERAR TODAS LAS LISTAS -->
+    @for (list of lists; track $index) {
+    <div class="list-container">
+      <div class="list-title-container">
+        <!-- Verifica si se está editando el título -->
+        @if (!editTitle[list.id]) {
+        <p (click)="editingTitle(list, true)" class="list-title">
+          {{ list.title }}
+        </p>
+        } @if (editTitle[list.id]) {
+        <input matInput [(ngModel)]="list.title" class="title-input" />
+        <button mat-button (click)="updateListTitle(list)">Save</button>
+        }
+      </div>
+
+      <!-- ITERAR TARJETAS DE LA LISTA -->
+      <div class="cards-container">
+        @for(card of listCards[list.id]; track card.id) {
+        <div class="card" (click)="editingCard(card, true)">
+          @if (!editCard[card.id]) {
+          <p class="card-content">{{ card.title }}</p>
+          } @if (editCard[card.id]) {
+          <input matInput [(ngModel)]="card.title" class="card-input" />
+          <button mat-button (click)="updateCard(card)">Update</button>
+          }
+        </div>
+        }
+        <div (click)="addCard(list)" class="add-card">+ Add a card</div>
+        <button mat-button color="warn" (click)="deleteBoardList(list)">
+          Delete list
+        </button>
+      </div>
+    </div>
+    }
+
+    <div (click)="addList()" class="new-list">+ New list</div>
+  </div>
+
+  <div class="invite-section">
+    <span class="invite-title">Invite</span>
+    <input
+      [(ngModel)]="addUserEmail"
+      placeholder="john@doe.com"
+      class="invite-input"
+    />
+    <button (click)="addUser()" class="invite-button">Invite</button>
+  </div>
+</main>

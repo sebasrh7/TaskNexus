@@ -1,0 +1,181 @@
+/* Header */
+.header-toolbar {
+  background-color: #059669; /* bg-emerald-600 */
+  color: white;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px; /* Similar a Tailwind */
+}
+
+.back-link {
+  font-weight: 600;
+  color: #065f46; /* text-emerald-900 */
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.board-title-input {
+  margin-left: 40px;
+  flex-grow: 1;
+}
+
+.save-button {
+  font-weight: 500;
+}
+
+.delete-container {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  text-transform: none; /* Evita mayúsculas en botones */
+}
+
+button.mat-button {
+  font-weight: 500; /* font-medium */
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+
+button.mat-warn {
+  color: #d32f2f;
+  background-color: #ffebee;
+  border: 1px solid #d32f2f;
+}
+
+button:hover {
+  background-color: #d1fae5; /* Cambio en hover para botones normales */
+}
+
+button.mat-warn:hover {
+  background-color: #fce4ec; /* Hover para botón de eliminar */
+}
+
+/* Container principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+/* Listas */
+.list-container {
+  background-color: #e6f9e9;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 128, 0, 0.1);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease;
+}
+
+.list-container:hover {
+  background-color: #c7eedf;
+}
+
+.list-title-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.list-title {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Tarjetas */
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  background-color: #f0fdfa;
+}
+
+.card-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background-color: #f9fafb;
+}
+
+/* Agregar tarjetas y listas */
+.add-card, .new-list {
+  background-color: #34d399;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-card:hover, .new-list:hover {
+  background-color: #059669;
+}
+
+/* Sección de invitación */
+.invite-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.invite-section input {
+  width: 100%;
+  max-width: 250px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+.invite-section button {
+  padding: 8px 16px;
+  background-color: #059669;
+  color: white;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.invite-section button:hover {
+  background-color: #047857;
+}
