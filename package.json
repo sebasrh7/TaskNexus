@@ -24,6 +24,7 @@
     "@supabase/gotrue-js": "^2.61.0",
     "@supabase/supabase-js": "2.45.4",
     "@types/node": "^22.6.1",
+    "ngx-gravatar": "^13.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
