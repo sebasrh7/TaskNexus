@@ -1,32 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-// import { Router } from '@angular/router';
-// import { DataService } from '../../../services/data.service';
+import { MatButtonModule } from '@angular/material/button';
+import { Router, RouterLink } from '@angular/router';
+import { DataService } from '../../../services/data.service';
+import { AsyncPipe } from '@angular/common';
+import { GravatarModule } from 'ngx-gravatar';
 
 @Component({
   selector: 'app-workspace',
   standalone: true,
-  imports: [],
+  imports: [MatButtonModule, RouterLink, AsyncPipe, GravatarModule],
   templateUrl: './workspace.component.html',
   styleUrl: './workspace.component.css',
 })
 export class WorkspaceComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    // private router: Router,
-    // private dataService: DataService
-  ) {}
+  boards: any = [];
+  auth = inject(AuthService);
+  user = this.auth.currentUser;
 
-  ngOnInit() {
-    // this.fetchData();
+  constructor(private dataService: DataService, private router: Router) {}
+
+  async ngOnInit() {
+    this.boards = await this.dataService.getBoards();
   }
 
-  // async fetchData() {
-  //   const data = await this.dataService.getAllData('');
-  //   console.log(data);
-  // }
+  async startBoard() {
+    await this.dataService.startBoard();
+    this.boards = await this.dataService.getBoards();
+
+    if (this.boards.length > 0) {
+      const newBoard = this.boards.pop();
+
+      if (newBoard.boards) {
+        this.router.navigateByUrl(`/workspace/${newBoard.boards.id}`);
+      }
+    }
+  }
 
   logout() {
-    this.authService.logout();
+    this.auth.logout();
   }
 }

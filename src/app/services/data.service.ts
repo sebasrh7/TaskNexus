@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { SupabaseClient, createClient } from '@supabase/supabase-js'; // Asegúrate de que la ruta sea la correcta para tu proyecto
-import { AuthService } from './auth.service'; // Asegúrate de que la ruta sea la correcta para tu proyecto
-import { environment } from '../../environments/environment'; // Ajusta si la ruta es diferente
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { environment } from '../../environments/environment';
+import { Subject } from 'rxjs';
+
+export const USER_BOARDS_TABLE = 'user_boards';
+export const BOARDS_TABLE = 'boards';
+export const CARDS_TABLE = 'cards';
+export const LISTS_TABLE = 'lists';
+export const USERS_TABLE = 'users';
 
 @Injectable({
   providedIn: 'root',
@@ -9,127 +15,166 @@ import { environment } from '../../environments/environment'; // Ajusta si la ru
 export class DataService {
   private supabase: SupabaseClient;
 
-  constructor(private authService: AuthService) {
+  constructor() {
     this.supabase = createClient(
-      environment.supabaseUrl,
-      environment.supabaseAnonKey
+      environment.supabase.supabaseUrl,
+      environment.supabase.supabaseAnonKey
     );
   }
 
-  /**
-   * Método para obtener los datos de un usuario específico
-   * @param userId - ID del usuario
-   */
+  async startBoard() {
+    return await this.supabase.from(BOARDS_TABLE).insert({});
+  }
 
-  async getUserData(userId: string): Promise<any> {
-    try {
-      const { data, error } = await this.supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId);
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+  async getBoards() {
+    const boards = await this.supabase.from(USER_BOARDS_TABLE).select(`
+      boards:board_id ( title, id )
+    `);
+    return boards.data || [];
+  }
+
+  // CRUD Board
+  async getBoardInfo(boardId: string) {
+    return await this.supabase
+      .from(BOARDS_TABLE)
+      .select('*')
+      .match({ id: boardId })
+      .single();
+  }
+
+  async updateBoard(board: any) {
+    return await this.supabase
+      .from(BOARDS_TABLE)
+      .update(board)
+      .match({ id: board.id });
+  }
+
+  async deleteBoard(board: any) {
+    return await this.supabase
+      .from(BOARDS_TABLE)
+      .delete()
+      .match({ id: board.id });
+  }
+
+  // CRUD Lists
+  async getBoardLists(boardId: string) {
+    const lists = await this.supabase
+      .from(LISTS_TABLE)
+      .select('*')
+      .eq('board_id', boardId)
+      .order('position');
+
+    return lists.data || [];
+  }
+
+  async addBoardList(boardId: string, position = 0) {
+    return await this.supabase
+      .from(LISTS_TABLE)
+      .insert({ board_id: boardId, position, title: 'New List' })
+      .select('*')
+      .single();
+  }
+
+  async updateBoardList(list: any) {
+    return await this.supabase
+      .from(LISTS_TABLE)
+      .update(list)
+      .match({ id: list.id });
+  }
+
+  async deleteBoardList(list: any) {
+    return await this.supabase
+      .from(LISTS_TABLE)
+      .delete()
+      .match({ id: list.id });
+  }
+
+  // CRUD Cards
+  async addListCard(listId: string, boardId: string, position = 0) {
+    return await this.supabase
+      .from(CARDS_TABLE)
+      .insert({ board_id: boardId, list_id: listId, position })
+      .select('*')
+      .single();
+  }
+
+  async getListCards(listId: string) {
+    const lists = await this.supabase
+      .from(CARDS_TABLE)
+      .select('*')
+      .eq('list_id', listId)
+      .order('position');
+
+    return lists.data || [];
+  }
+
+  async updateCard(card: any) {
+    return await this.supabase
+      .from(CARDS_TABLE)
+      .update(card)
+      .match({ id: card.id });
+  }
+
+  async deleteCard(card: any) {
+    return await this.supabase
+      .from(CARDS_TABLE)
+      .delete()
+      .match({ id: card.id });
+  }
+
+  // Invite others
+  async addUserToBoard(boardId: string, email: string) {
+    const user = await this.supabase
+      .from(USERS_TABLE)
+      .select('id')
+      .match({ email })
+      .single();
+
+    if (user.data?.id) {
+      const userId = user.data.id;
+      const userBoard = await this.supabase.from(USER_BOARDS_TABLE).insert({
+        user_id: userId,
+        board_id: boardId,
+      });
+      return userBoard;
+    } else {
       return null;
     }
   }
 
-  /**
-   * Método para obtener todos los datos de una tabla específica
-   * @param tableName - Nombre de la tabla de la que deseas obtener datos
-   */
-  async getAllData(tableName: string): Promise<any> {
-    try {
-      const { data, error } = await this.supabase.from(tableName).select('*');
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error(`Error fetching data from ${tableName}:`, error);
-      return null;
-    }
-  }
+  getTableChanges() {
+    const changes = new Subject();
 
-  /**
-   * Método para insertar un registro en una tabla
-   * @param tableName - Nombre de la tabla donde se va a insertar
-   * @param data - Los datos que se quieren insertar
-   */
-  async insertData(tableName: string, data: any): Promise<any> {
-    try {
-      const { error } = await this.supabase.from(tableName).insert([data]);
-      if (error) throw error;
-      return true;
-    } catch (error) {
-      console.error(`Error inserting data into ${tableName}:`, error);
-      return false;
-    }
-  }
+    console.log('Listening for changes');
 
-  /**
-   * Método para actualizar un registro
-   * @param tableName - Nombre de la tabla donde se actualiza
-   * @param id - ID del registro que se va a actualizar
-   * @param updatedData - Los datos actualizados
-   */
-  async updateData(
-    tableName: string,
-    id: string,
-    updatedData: any
-  ): Promise<any> {
-    try {
-      const { error } = await this.supabase
-        .from(tableName)
-        .update(updatedData)
-        .eq('id', id);
-      if (error) throw error;
-      return true;
-    } catch (error) {
-      console.error(`Error updating data in ${tableName}:`, error);
-      return false;
-    }
-  }
+    this.supabase
+      .channel(CARDS_TABLE)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: CARDS_TABLE,
+        },
+        (payload) => {
+          console.log('Card change', payload);
+          changes.next(payload);
+        }
+      )
+      .subscribe();
 
-  /**
-   * Método para eliminar un registro por ID
-   * @param tableName - Nombre de la tabla donde se va a eliminar
-   * @param id - ID del registro que se desea eliminar
-   */
-  async deleteData(tableName: string, id: string): Promise<any> {
-    try {
-      const { error } = await this.supabase
-        .from(tableName)
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-      return true;
-    } catch (error) {
-      console.error(`Error deleting data from ${tableName}:`, error);
-      return false;
-    }
-  }
+    this.supabase
+      .channel(LISTS_TABLE)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: LISTS_TABLE },
+        (payload) => {
+          console.log('List change', payload);
+          changes.next(payload);
+        }
+      )
+      .subscribe();
 
-  /**
-   * Método para obtener datos filtrados
-   * @param tableName - Nombre de la tabla
-   * @param column - Columna para filtrar
-   * @param value - Valor de la columna para filtrar
-   */
-  async getFilteredData(
-    tableName: string,
-    column: string,
-    value: any
-  ): Promise<any> {
-    try {
-      const { data, error } = await this.supabase
-        .from(tableName)
-        .select('*')
-        .eq(column, value);
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error(`Error filtering data from ${tableName}:`, error);
-      return null;
-    }
+    return changes.asObservable();
   }
 }

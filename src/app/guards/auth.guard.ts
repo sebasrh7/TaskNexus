@@ -8,18 +8,16 @@ import { map, filter, take } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean | UrlTree> {
-    return this.authService.currentUser.pipe(
+    return this.auth.currentUser.pipe(
       filter((val) => val !== null),
       take(1),
       map((isAuthenticated) => {
         if (isAuthenticated) {
-          console.log('Authenticated');
           return true;
         } else {
-          console.log('Not authenticated');
           return this.router.createUrlTree(['/']);
         }
       })
